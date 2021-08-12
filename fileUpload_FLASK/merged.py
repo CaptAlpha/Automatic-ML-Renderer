@@ -15,6 +15,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     accuracy=0
+    code=''
     if request.method == 'POST':
         file = request.files['csvfile']
         tar=request.form['target']
@@ -36,22 +37,26 @@ def index():
             if(df[col].isnull().sum()!=0):
                 df[col]=df[col].fillna(df[col].dropna().mean())
 
-        #After taking taregt as ip (modify this later)
+        #Train-Test Split
         a=df.pop(tar)
         df[tar]=a
         x=df.iloc[:,:-1].values
         y=df.iloc[:,-1].values
         x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.2,random_state=1)
+
+        #Scaling
         sc=StandardScaler()
         x_train[:,:]=sc.fit_transform(x_train[:,:])
         x_test[:,:]=sc.fit_transform(x_test[:,:])
+
+        #Training the model
         regressor = LinearRegression()
         regressor.fit(x_train,y_train)    
         from sklearn.metrics import r2_score
         y_pred=regressor.predict(x_test)
         accuracy=r2_score(y_test, y_pred)
 
-    return render_template('index.html', prediction_text='Accuracy of the trained model is  {}'.format(accuracy))
+    return render_template('index.html', prediction_text='Accuracy of the trained model is\n {}'.format(accuracy))
 
 if __name__ == '__main__':
     app.run(debug=True)

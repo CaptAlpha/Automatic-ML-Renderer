@@ -2,6 +2,10 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import send_file
+from flask import current_app
+from flask import session
+from flask import redirect
+from flask import send_from_directory
 import os
 import numpy as np
 import pandas as pd
@@ -108,13 +112,21 @@ accuracy=r2_score(y_test, y_pred)
         code.write(final)
 
     return render_template('index.html', prediction_text='Trained Model with accuracy {}'.format(accuracy))
-
+"""
 @app.route('/return-files/')
 def return_files_tut():
 	try:
 		return send_file('static/output.py', attachment_filename='output.py')
 	except Exception as e:
 		return str(e)
+"""
+
+@app.route('/return-files/', methods=['GET', 'POST'])
+def download(filename):
+    # Appending app path to upload folder path within app root folder
+    uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+    # Returning file from appended path
+    return send_from_directory(directory=uploads, filename=filename)
 
 if __name__ == '__main__':
     app.run(debug=True)

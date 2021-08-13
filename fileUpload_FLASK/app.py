@@ -1,10 +1,10 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import send_file
 import os
 import numpy as np
 import pandas as pd
-import os
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -58,10 +58,12 @@ def index():
         
 
         final="""
+!pip install numpy
+!pip install pandas
+!pip install scikit-learn
 import os
 import numpy as np
 import pandas as pd
-import os
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -102,11 +104,17 @@ y_pred=regressor.predict(x_test)
 accuracy=r2_score(y_test, y_pred)
 """
 
-        #Writing to file
-        # code=open("static/code.py",'w')
-        # code.write(final)
+        code=open("static/output.py","w")
+        code.write(final)
 
-    return render_template('index.html', prediction_text='Trained Model with accuracy {}:\n {}'.format(accuracy,final))
+    return render_template('index.html', prediction_text='Trained Model with accuracy {}'.format(accuracy))
+
+@app.route('/return-files/')
+def return_files_tut():
+	try:
+		return send_file('static/output.py', attachment_filename='output.py')
+	except Exception as e:
+		return str(e)
 
 if __name__ == '__main__':
     app.run(debug=True)

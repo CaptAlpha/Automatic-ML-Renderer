@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template
-from flask import request
+from flask import request, redirect, url_for
 from flask import send_file
 import os
 import numpy as np
@@ -18,24 +18,63 @@ from sklearn.metrics import r2_score
 from sklearn.metrics import accuracy_score
 
 app = Flask(__name__)
-
+filepath=""
 @app.route('/', methods=['GET', 'POST'])
 def index():
+
+    filepath = "NOT FOUND"
+    df = pd.DataFrame()
     accuracy=0
     final=''
     Keymax=''
     if request.method == 'POST':
         file = request.files['csvfile']
-        tar=request.form['target']
-        type=request.form['type']
+       
         if not os.path.isdir('static'):
             os.mkdir('static')
+        
         filepath = os.path.join('static', file.filename)
+        newName = "static/data.csv"
+        
         file.save(filepath)
+        fp = os.rename(filepath, newName)
+        
+        
+            
+        return redirect(url_for('model'))
 
-        df=pd.read_csv(filepath)
 
-        # Identifying the categotical columns and label encoding them
+    return render_template('index.html', filepath=filepath, df = df)
+print(filepath)
+fp = "static\data.csv"
+
+
+@app.route('/api/v1/resources/getservices', methods=['GET'])
+def api_services():
+    d = {'Services': ["red", "green", "blue"]}
+    drf = pd.DataFrame(data=d)
+    return render_template('view.html', table=drf)
+
+
+
+@app.route('/model/', methods=['GET', 'POST'])
+def model():
+    df = pd.DataFrame()
+    
+    targets = list(df.columns.values)
+    accuracy=0
+    final=''
+    Keymax=''
+    
+    if request.method == 'POST':
+        print(fp)
+        df=pd.read_csv(fp)
+        targets = list(df.columns.values)
+        print(targets)
+        tar=request.form['target']
+        type=request.form['type']
+        
+         # Identifying the categotical columns and label encoding them
         le = LabelEncoder()
         for col in df:
             if(df[col].dtype=='object'):
@@ -57,6 +96,20 @@ def index():
         sc=StandardScaler()
         x_train[:,:]=sc.fit_transform(x_train[:,:])
         x_test[:,:]=sc.fit_transform(x_test[:,:])
+
+
+    
+  
+#       /\      /\                        |‾|             |‾|     
+#      /  \    /  \                       | |             | |     
+#     / /\ \  / /\ \      /‾‾‾‾‾\    /‾‾‾‾‾ |   /‾‾‾‾‾ \  | |     
+#    / /  \ \/ /  \ \    | |‾‾‾| |  | |‾‾‾| |  | |‾‾‾| |  | |     
+#   / /    \__/    \ \   | |   | |  | |   | |  | |‾‾‾     | |
+#  / /              \ \  | |___| |  | |___| |  | |___|‾|  | |
+# / /                \ \  \_____/    \_____/   \______/   |_|
+
+
+
 
         final="""import os
 import numpy as np
@@ -196,9 +249,11 @@ accuracy=r2_score(y_test, y_pred)"""
 
         code=open("static/output.py","w")
         code.write(final)
-        os.remove(filepath)
+        os.remove("static\data.csv")
+        
 
-    return render_template('index.html', prediction_text='Trained {} model with accuracy {}'.format(Keymax,accuracy))
+    return render_template('model.html', prediction_text='Trained {} model with accuracy {}'.format(Keymax,accuracy), targets=targets) 
+    
 
 @app.route('/return-files/')
 def return_files_tut():
@@ -209,3 +264,4 @@ def return_files_tut():
 
 if __name__ == '__main__':
     app.run(debug=True)
+

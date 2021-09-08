@@ -13,13 +13,21 @@
     <title>Automatic ML</title>
 </head>
 <body>
-    <header>Automatic ML Renderer</header>
-
-    <h1></h1>
-    <div class="">
-        <form action="" method="post" enctype="multipart/form-data">
-            <input type="file" name="csvfile" class="input">
-            
+    <h1>Automatic ML Renderer</h1>
+    <div class="">  
+        <form action="" method="post" enctype="">
+        
+            <select name="target" id="target" method="post"  action="/model">
+                {% for tar in targets %}
+                        <option value="{{ tar }}">{{ tar }}</option>
+                    {% endfor %}
+                </select>
+            <!--input type="text" name="target" placeholder="Enter the target variable" required="required" /-->
+                
+            <select name="type" id="type">
+                <option value="regression">Regression</option>
+                <option value="classification">Classification</option>
+            </select>
             <br>
             <input type="submit" value="Submit">
         </form>
@@ -29,7 +37,13 @@
         
         <br>
         <br>
-    
+        
+
+        <div class="container" align="left">
+            <a href="/return-files/" download><button class='btn btn-default'>Download</button></a>
+        </div>
+
+        
 
     </div>
 </body>

@@ -32,6 +32,10 @@ def index():
        
         if not os.path.isdir('static'):
             os.mkdir('static')
+
+        if os.path.isfile("static/data.csv"):
+            os.remove("static/data.csv")
+
         
         filepath = os.path.join('static', file.filename)
         newName = "static/data.csv"

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request, redirect, url_for
-from flask import send_file
+from flask import send_file,  jsonify
 import os
 import numpy as np
 import pandas as pd
@@ -16,6 +16,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import r2_score
 from sklearn.metrics import accuracy_score
+import joblib
 
 
 """""
@@ -166,10 +167,16 @@ x_test[:,:]=sc.fit_transform(x_test[:,:])
             model1.fit(x_train,y_train)
             y_pred1=model1.predict(x_test)
             score['LinearRegression()']=(r2_score(y_test, y_pred1))
+
+
+
             model2 = DecisionTreeRegressor()
             model2.fit(x_train,y_train)
             y_pred2=model2.predict(x_test)
             score['DecisionTreeRegressor()']=(r2_score(y_test, y_pred2))
+
+
+
             model3 = SVR()
             model3.fit(x_train,y_train)
             y_pred3=model3.predict(x_test)
@@ -178,6 +185,8 @@ x_test[:,:]=sc.fit_transform(x_test[:,:])
             #Finding the best model
             Keymax = max(score, key=score.get)
             accuracy=score[Keymax]
+            
+            
 
             
             if Keymax=="LinearRegression()":
@@ -189,6 +198,7 @@ from sklearn.metrics import r2_score
 y_pred=regressor.predict(x_test)
 accuracy=r2_score(y_test, y_pred)"""
                 final+=modelstr
+                joblib.dump(model1, 'model.pkl')
 
             elif Keymax=='DecisionTreeRegressor()':
                 modelstr="""#Training the model
@@ -199,6 +209,7 @@ from sklearn.metrics import r2_score
 y_pred=regressor.predict(x_test)
 accuracy=r2_score(y_test, y_pred)"""
                 final+=modelstr
+                joblib.dump(model2, 'model.pkl')
 
             elif Keymax=="SVR()":
                 modelstr="""#Training the model
@@ -209,6 +220,7 @@ from sklearn.metrics import r2_score
 y_pred=regressor.predict(x_test)
 accuracy=r2_score(y_test, y_pred)"""
                 final+=modelstr
+                joblib.dump(model3, 'model.pkl')
 
         elif type=='classification':
             #Training various models
@@ -239,7 +251,9 @@ regressor.fit(x_train,y_train)
 from sklearn.metrics import accuracy_score
 y_pred=regressor.predict(x_test)
 accuracy=r2_score(y_test, y_pred)"""
+
                 final+=modelstr
+                joblib.dump(model1, 'model.pkl')
 
             elif Keymax=='DecisionTreeClassifier()':
                 modelstr="""#Training the model
@@ -249,7 +263,8 @@ regressor.fit(x_train,y_train)
 from sklearn.metrics import accuracy_score
 y_pred=regressor.predict(x_test)
 accuracy=r2_score(y_test, y_pred)"""
-                final+=modelstr
+                final+=modelstr 
+                joblib.dump(model2, 'model.pkl')
 
             elif Keymax=="RandomForestClassifier()":
                 modelstr="""#Training the model
@@ -259,11 +274,23 @@ regressor.fit(x_train,y_train)
 from sklearn.metrics import accuracy_scorey_pred=regressor.predict(x_test)
 accuracy=r2_score(y_test, y_pred)"""
                 final+=modelstr
+                joblib.dump(model3, 'model.pkl')
+
 
         code=open("static/output.py","w")
         code.write(final)
         os.remove("static\data.csv")
         accuracy = round(accuracy*100, 2)
+        lr = joblib.load('model.pkl')
+        model_columns = list(x_test.columns)
+        json_ = request.json
+        print(json_)
+        query = pd.get_dummies(pd.DataFrame(json_))
+        query = query.reindex(columns=model_columns, fill_value=0)
+
+        prediction = list(model.predict(query))
+
+        return jsonify({'prediction': str(prediction)}) 
     return render_template('model.html', prediction_text='Trained {} model with {}% accuracy'.format(Keymax, accuracy), targets=targets)
     
 

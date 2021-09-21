@@ -171,20 +171,3 @@ padding: 0;
 		font:0.2em;
 	}
 }	
-
-.fileup{
-	margin: 2%;
-	margin-right: 3%;
-	margin-top: 3%;
-	color: #404D61;
-	font-weight: bold;
-	white-space: nowrap;
-}
-
-.Selection{
-	margin: 2%;
-	margin-right: 4%;
-	color: #404D61;
-	font-weight: bold;
-	white-space: nowrap;
-}

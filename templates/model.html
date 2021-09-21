@@ -29,9 +29,7 @@
         Even if you don't know to write a single line of code, you can get machine learning code rendered following just a few steps.
         <br>
         <ul>
-            <li>
-                <h4>Step 1: <b>Upload your dataset in CSV format.</b></h4>   
-            </li>
+           
             <li>
                 <h4>Step 2: 
                     <b>Choose the variable you wish to predict.</b></h4>
@@ -50,11 +48,16 @@
                         </li>
                     </ul>
             </li>
-            
             <li>
-                <h4>Step 4: <b>You can download your machine learning code by clicking the download button.</b></h4>
+                <h4>Step 4: 
+                    <b>Click on the submit button.</b></h4>
             </li>
+            
+           
+              
+           
         </ul>
+        <h3><b>You can download your machine learning code by clicking the download button.</b></h3>
         </p>
     </div>
 
@@ -65,8 +68,9 @@
                 <div class="number">
                     2  
                 </div>
-                <p class="Selection">Target Feature</p> 
+                
                 <select name="target" id="target" method="post"  action="/model">
+                    <option value="" disabled selected hidden>Choose Target Value</option>
                     {% for tar in targets %}
                             <option value="{{ tar }}">{{ tar }}</option>
                         {% endfor %}
@@ -77,8 +81,9 @@
                 <div class="number">
                     3
                 </div>
-                <p class="Selection">Algorithm Type Selection</p> 
+               
                 <select name="type" id="type">
+                    <option value="" disabled selected hidden>Choose Algorithm Type</option>
                     <option value="regression">Regression</option>
                     <option value="classification">Classification</option>
                 </select>

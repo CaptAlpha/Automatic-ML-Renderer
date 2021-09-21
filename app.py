@@ -131,6 +131,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+import joblib
 
 filepath=   #Please enter the filepath of csv file.
 tar=    #Please enter target variable name
@@ -141,6 +142,7 @@ le = LabelEncoder()
 for col in df:
     if(df[col].dtype=='object'):
         df[col]=le.fit_transform(df[col])
+joblib.dump(le,"encoder.pkl")
 
 # Identifying the columns with null values and filling them with mean
 for col in df:
@@ -158,6 +160,7 @@ x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.2,random_state=
 sc=StandardScaler()
 x_train[:,:]=sc.fit_transform(x_train[:,:])
 x_test[:,:]=sc.fit_transform(x_test[:,:])
+joblib.dump(sc,"scaler.pkl")
 
 """
         if type=="regression":
@@ -169,12 +172,10 @@ x_test[:,:]=sc.fit_transform(x_test[:,:])
             score['LinearRegression()']=(r2_score(y_test, y_pred1))
 
 
-
             model2 = DecisionTreeRegressor()
             model2.fit(x_train,y_train)
             y_pred2=model2.predict(x_test)
             score['DecisionTreeRegressor()']=(r2_score(y_test, y_pred2))
-
 
 
             model3 = SVR()
@@ -187,8 +188,6 @@ x_test[:,:]=sc.fit_transform(x_test[:,:])
             accuracy=score[Keymax]
             
             
-
-            
             if Keymax=="LinearRegression()":
                 modelstr="""#Training the model
 from sklearn.linear_model import LinearRegression
@@ -196,9 +195,9 @@ regressor = LinearRegression()
 regressor.fit(x_train,y_train)    
 from sklearn.metrics import r2_score
 y_pred=regressor.predict(x_test)
-accuracy=r2_score(y_test, y_pred)"""
+accuracy=r2_score(y_test, y_pred)
+joblib.dump(regressor, 'model.pkl')"""
                 final+=modelstr
-                joblib.dump(model1, 'model.pkl')
 
             elif Keymax=='DecisionTreeRegressor()':
                 modelstr="""#Training the model
@@ -207,9 +206,9 @@ regressor = DecisionTreeRegressor()
 regressor.fit(x_train,y_train)    
 from sklearn.metrics import r2_score
 y_pred=regressor.predict(x_test)
-accuracy=r2_score(y_test, y_pred)"""
+accuracy=r2_score(y_test, y_pred)
+joblib.dump(regressor, 'model.pkl')"""
                 final+=modelstr
-                joblib.dump(model2, 'model.pkl')
 
             elif Keymax=="SVR()":
                 modelstr="""#Training the model
@@ -218,9 +217,9 @@ regressor = SVR()
 regressor.fit(x_train,y_train)    
 from sklearn.metrics import r2_score
 y_pred=regressor.predict(x_test)
-accuracy=r2_score(y_test, y_pred)"""
+accuracy=r2_score(y_test, y_pred)
+joblib.dump(regressor, 'model.pkl')"""
                 final+=modelstr
-                joblib.dump(model3, 'model.pkl')
 
         elif type=='classification':
             #Training various models
@@ -246,51 +245,43 @@ accuracy=r2_score(y_test, y_pred)"""
             if Keymax=="LogisticRegression()":
                 modelstr="""#Training the model
 from sklearn.linear_model import LinearRegression
-regressor = LogisticRegression()
-regressor.fit(x_train,y_train)    
+classifier = LogisticRegression()
+classifier.fit(x_train,y_train)    
 from sklearn.metrics import accuracy_score
-y_pred=regressor.predict(x_test)
-accuracy=r2_score(y_test, y_pred)"""
+y_pred=classifier.predict(x_test)
+accuracy=accuracy_score(y_test, y_pred)
+joblib.dump(classifier, 'model.pkl')"""
 
                 final+=modelstr
-                joblib.dump(model1, 'model.pkl')
 
             elif Keymax=='DecisionTreeClassifier()':
                 modelstr="""#Training the model
 from sklearn.tree import DecisionTreeClassifier
-regressor = DecisionTreeClassifier(criterion = 'entropy', random_state =0 )
-regressor.fit(x_train,y_train)    
+classifier = DecisionTreeClassifier(criterion = 'entropy', random_state =0 )
+classifier.fit(x_train,y_train)    
 from sklearn.metrics import accuracy_score
-y_pred=regressor.predict(x_test)
-accuracy=r2_score(y_test, y_pred)"""
+y_pred=classifier.predict(x_test)
+accuracy=accuracy_score(y_test, y_pred)
+joblib.dump(classifier, 'model.pkl')"""
                 final+=modelstr 
-                joblib.dump(model2, 'model.pkl')
 
             elif Keymax=="RandomForestClassifier()":
                 modelstr="""#Training the model
 from sklearn.ensemble import RandomForestClassifier
-regressor = RandomForestClassifier()
-regressor.fit(x_train,y_train)    
-from sklearn.metrics import accuracy_scorey_pred=regressor.predict(x_test)
-accuracy=r2_score(y_test, y_pred)"""
+classifier = RandomForestClassifier()
+classifier.fit(x_train,y_train)    
+from sklearn.metrics import accuracy_score
+y_pred=classifier.predict(x_test)
+accuracy=accuracy_score(y_test, y_pred)
+joblib.dump(classifier, 'model.pkl')"""
                 final+=modelstr
-                joblib.dump(model3, 'model.pkl')
 
 
         code=open("static/output.py","w")
         code.write(final)
         os.remove("static\data.csv")
         accuracy = round(accuracy*100, 2)
-        lr = joblib.load('model.pkl')
-        model_columns = list(x_test.columns)
-        json_ = request.json
-        print(json_)
-        query = pd.get_dummies(pd.DataFrame(json_))
-        query = query.reindex(columns=model_columns, fill_value=0)
-
-        prediction = list(model.predict(query))
-
-        return jsonify({'prediction': str(prediction)}) 
+         
     return render_template('model.html', prediction_text='Trained {} model with {}% accuracy'.format(Keymax, accuracy), targets=targets)
     
 

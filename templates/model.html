@@ -8,43 +8,90 @@
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-        
-    <title>Automatic ML</title>
+    <link href='https://fonts.googleapis.com/css?family=DM Sans' rel='stylesheet'>
+    <link rel="stylesheet" href="..\static\css\style.css">
+    <link rel="icon" href="..\static\icon.ico">
+    <title>Automatic ML Renderer</title> 
 </head>
 <body>
-    <h1>Automatic ML Renderer</h1>
-    <div class="">  
-        <form action="" method="post" enctype="">
-        
-            <select name="target" id="target" method="post"  action="/model">
-                {% for tar in targets %}
-                        <option value="{{ tar }}">{{ tar }}</option>
-                    {% endfor %}
-                </select>
-            <!--input type="text" name="target" placeholder="Enter the target variable" required="required" /-->
-                
-            <select name="type" id="type">
-                <option value="regression">Regression</option>
-                <option value="classification">Classification</option>
-            </select>
-            <br>
-            <input type="submit" value="Submit">
-        </form>
-
-        <br>
-        {{ prediction_text }}
-        
-        <br>
-        <br>
-        
-
-        <div class="container" align="left">
-            <a href="/return-files/" download><button class='btn btn-default'>Download</button></a>
-        </div>
-
-        
-
+    <br>
+    <div class="header">
+    <img src="..\static\icon.png"  class='icon'>
+    <h1 class='heading'>ML Renderer</h1>
+    <br>
     </div>
+    <hr class='divider'>
+    <br>
+    <div class="desc">
+        <p>
+            <h2>The TIME has come for the you to bring Machine Learning to LIFE.</h2>
+        <h3>You can now just add your dataset and get pre-trained model with the code.</h3>
+        Even if you don't know to write a single line of code, you can get machine learning code rendered following just a few steps.
+        <br>
+        <ul>
+            <li>
+                <h4>Step 1: <b>Upload your dataset in CSV format.</b></h4>   
+            </li>
+            <li>
+                <h4>Step 2: 
+                    <b>Choose the variable you wish to predict.</b></h4>
+            </li>
+            <li>
+                <h4>Step 3: 
+                    <b>Choose the type of algorithm.</b></h4>
+                    <ul>
+                        <li>
+                            <h4> Regression: If you want to predict the value of a particular entity.
+                            </h4>
+                        </li>
+                        <li>
+                            <h4> Classification: If you want to predict the class of a particular entity.
+                            </h4>
+                        </li>
+                    </ul>
+            </li>
+            
+            <li>
+                <h4>Step 4: <b>You can download your machine learning code by clicking the download button.</b></h4>
+            </li>
+        </ul>
+        </p>
+    </div>
+    
+    <form action="" method="post" enctype="">
+        <div class="main">  
+            <div class="inputs">
+                <div class="number">
+                    2
+                </div>
+                <select name="target" id="target" method="post"  action="/model">
+                    {% for tar in targets %}
+                            <option value="{{ tar }}">{{ tar }}</option>
+                        {% endfor %}
+                </select>
+            </div>
+            <div class="inputs">
+                <div class="number">
+                    3
+                </div>
+                <select name="type" id="type">
+                    <option value="regression">Regression</option>
+                    <option value="classification">Classification</option>
+                </select>
+            </div>
+        </div>
+        <div class="main">
+            <div class="inputs">
+                <input type="submit" value="Submit" class="submit">
+            </div>
+        </div>
+    </form>        
+        
+    <div class="container">
+        {{ prediction_text }}
+        <br>
+        <a href="/return-files/" download><button class='down'>Download</button></a>
+    </div>
+
 </body>
 </html>

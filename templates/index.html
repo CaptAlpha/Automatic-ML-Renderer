@@ -7,30 +7,70 @@
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=DM Sans' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-        
-    <title>Automatic ML</title>
+    <link rel="stylesheet" href="..\static\css\style.css">
+    <link rel="icon" href="..\static\icon.ico">       
+    <title>Automatic ML Renderer</title> 
 </head>
+
 <body>
-    <header>Automatic ML Renderer</header>
-
-    <h1></h1>
-    <div class="">
-        <form action="" method="post" enctype="multipart/form-data">
-            <input type="file" name="csvfile" class="input">
-            
-            <br>
-            <input type="submit" value="Submit">
-        </form>
-
-        <br>
-        {{ prediction_text }}
-        
-        <br>
-        <br>
-    
-
+    <br>
+    <div class="header">
+    <img src="..\static\icon.png"  class='icon'>
+    <h1 class='heading'>ML Renderer</h1>
+    <br>
     </div>
+    <hr class='divider'>
+    <br>
+    <div class="desc">
+        <p>
+            <h2>The TIME has come for the you to bring Machine Learning to LIFE.</h2>
+        <h3>You can now just add your dataset and get pre-trained model with the code.</h3>
+        Even if you don't know to write a single line of code, you can get machine learning code rendered following just a few steps.
+        <br>
+        <ul>
+            <li>
+                <h4>Step 1: <b>Upload your dataset in CSV format on this page and click on submit. You will be redirected to a new page.</b></h4>   
+            </li>
+            <li>
+                <h4>Step 2: 
+                    <b>Choose the variable you wish to predict from the dropdown list.</b></h4>
+            </li>
+            <li>
+                <h4>Step 3: 
+                    <b>Choose the type of algorithm.</b></h4>
+                    <ul>
+                        <li>
+                            <h4> Regression: If you want to predict the value of a particular entity.
+                            </h4>
+                        </li>
+                        <li>
+                            <h4> Classification: If you want to predict the class of a particular entity.
+                            </h4>
+                        </li>
+                    </ul>
+            </li>
+            
+            <li>
+                <h4>Step 4: <b>You can download your machine learning code by clicking the download button.</b></h4>
+            </li>
+        </ul>
+        </p>
+    </div>
+
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class='main'>
+            <div class="inputs">
+                    <div class="number">
+                        1
+                    </div>
+                    <input type="file" name="csvfile" class="input">
+            </div>
+            <div class="inputs">
+                <input type="submit" value="Submit" class="submit">
+            </div>
+        </div>
+     </form>
 </body>
 </html>

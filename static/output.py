@@ -33,9 +33,8 @@ x_train[:,:]=sc.fit_transform(x_train[:,:])
 x_test[:,:]=sc.fit_transform(x_test[:,:])
 
 #Training the model
-from sklearn.linear_model import LinearRegression
-regressor = LinearRegression()
+from sklearn.ensemble import RandomForestClassifier
+regressor = RandomForestClassifier()
 regressor.fit(x_train,y_train)    
-from sklearn.metrics import r2_score
-y_pred=regressor.predict(x_test)
+from sklearn.metrics import accuracy_scorey_pred=regressor.predict(x_test)
 accuracy=r2_score(y_test, y_pred)

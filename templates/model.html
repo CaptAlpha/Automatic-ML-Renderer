@@ -60,9 +60,11 @@
     
     <form action="" method="post" enctype="">
         <div class="main">  
+            
             <div class="inputs">
+                <h4>Target Feature</h4>  
                 <div class="number">
-                    2
+                    2  
                 </div>
                 <select name="target" id="target" method="post"  action="/model">
                     {% for tar in targets %}
@@ -70,7 +72,9 @@
                         {% endfor %}
                 </select>
             </div>
+            
             <div class="inputs">
+                <h4>Algorithm Type Selection</h4>
                 <div class="number">
                     3
                 </div>

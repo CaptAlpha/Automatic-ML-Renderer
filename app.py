@@ -17,6 +17,16 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import r2_score
 from sklearn.metrics import accuracy_score
 
+
+"""""
+  _   _                        ____             _       
+ | | | | ___  _ __ ___   ___  |  _ \ ___  _   _| |_ ___ 
+ | |_| |/ _ \| '_ ` _ \ / _ \ | |_) / _ \| | | | __/ _ \
+ |  _  | (_) | | | | | |  __/ |  _ < (_) | |_| | ||  __/
+ |_| |_|\___/|_| |_| |_|\___| |_| \_\___/ \__,_|\__\___|
+                                                        
+"""""  
+
 app = Flask(__name__)
 filepath=""
 @app.route('/', methods=['GET', 'POST'])
@@ -32,10 +42,6 @@ def index():
        
         if not os.path.isdir('static'):
             os.mkdir('static')
-
-        if os.path.isfile("static/data.csv"):
-            os.remove("static/data.csv")
-
         
         filepath = os.path.join('static', file.filename)
         newName = "static/data.csv"
@@ -52,13 +58,13 @@ def index():
 print(filepath)
 fp = "static\data.csv"
 
-
-@app.route('/api/v1/resources/getservices', methods=['GET'])
-def api_services():
-    d = {'Services': ["red", "green", "blue"]}
-    drf = pd.DataFrame(data=d)
-    return render_template('view.html', table=drf)
-
+"""""
+  __  __           _      _   ____             _       
+ |  \/  | ___   __| | ___| | |  _ \ ___  _   _| |_ ___ 
+ | |\/| |/ _ \ / _` |/ _ \ | | |_) / _ \| | | | __/ _ \
+ | |  | | (_) | (_| |  __/ | |  _ < (_) | |_| | ||  __/
+ |_|  |_|\___/ \__,_|\___|_| |_| \_\___/ \__,_|\__\___|
+"""""                                                  
 
 
 @app.route('/model/', methods=['GET', 'POST'])
@@ -254,8 +260,8 @@ accuracy=r2_score(y_test, y_pred)"""
         code=open("static/output.py","w")
         code.write(final)
         os.remove("static\data.csv")
-        
-    return render_template('model.html', prediction_text='Trained {} model with accuracy {}'.format(Keymax,accuracy), targets=targets)
+        accuracy = round(accuracy*100, 2)
+    return render_template('model.html', prediction_text='Trained {} model with {}% accuracy'.format(Keymax, accuracy), targets=targets)
     
 
 @app.route('/return-files/')

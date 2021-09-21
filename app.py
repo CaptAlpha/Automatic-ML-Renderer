@@ -59,8 +59,8 @@ def api_services():
 
 @app.route('/model/', methods=['GET', 'POST'])
 def model():
-    df = pd.DataFrame()
-    
+    # df = pd.DataFrame()
+    df = pd.read_csv(fp)
     targets = list(df.columns.values)
     accuracy=0
     final=''
@@ -251,8 +251,7 @@ accuracy=r2_score(y_test, y_pred)"""
         code.write(final)
         os.remove("static\data.csv")
         
-
-    return render_template('model.html', prediction_text='Trained {} model with accuracy {}'.format(Keymax,accuracy), targets=targets) 
+    return render_template('model.html', prediction_text='Trained {} model with accuracy {}'.format(Keymax,accuracy), targets=targets)
     
 
 @app.route('/return-files/')

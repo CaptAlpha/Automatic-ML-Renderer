@@ -57,15 +57,15 @@
         </ul>
         </p>
     </div>
-    
+
     <form action="" method="post" enctype="">
         <div class="main">  
             
             <div class="inputs">
-                <h4>Target Feature</h4>  
                 <div class="number">
                     2  
                 </div>
+                <p class="Selection">Target Feature</p> 
                 <select name="target" id="target" method="post"  action="/model">
                     {% for tar in targets %}
                             <option value="{{ tar }}">{{ tar }}</option>
@@ -74,10 +74,10 @@
             </div>
             
             <div class="inputs">
-                <h4>Algorithm Type Selection</h4>
                 <div class="number">
                     3
                 </div>
+                <p class="Selection">Algorithm Type Selection</p> 
                 <select name="type" id="type">
                     <option value="regression">Regression</option>
                     <option value="classification">Classification</option>
